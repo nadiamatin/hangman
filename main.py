@@ -4,6 +4,43 @@
 
 import random
 
+HANGMAN_PICS = ['''
+   +---+
+       |
+       |
+       |
+      ===''', '''
+   +---+
+   O   |
+        |
+        |
+       ===''', '''
+    +---+
+    O   |
+    |   |
+        |
+       ===''', '''
+    +---+
+    O   |
+   /|   |
+        |
+       ===''', '''
+    +---+
+    O   |
+   /|\  |
+        |
+       ===''', '''
+    +---+
+    O   |
+   /|\  |
+   /    |
+       ===''', '''
+    +---+
+    O   |
+   /|\  |
+   / \  |
+       ===''']
+
 def generateRandom():
     words = """ant baboon badger bat bear beaver camel cat clam cobra cougar
        coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk
@@ -14,13 +51,29 @@ def generateRandom():
     random_word = random.choice(words)
     return random_word
 
+def displayHangman():
 
+    for pic in HANGMAN_PICS:
+        print(pic)
+
+def getSpaces(word):
+    spaces = ""
+    for i in range(len(word)):
+        spaces += "_"
+    return spaces
 
 
 # main function
 def main():
-    print("Hello World")  # Press ⌘F8 to toggle the breakpoint.
-    print(generateRandom())
+    random_word = generateRandom()
+    print("The length of your word is " + str(len(random_word)) + " letters. Good luck!")
+    word_space = getSpaces(random_word)
+    print(word_space)
+    displayHangman()
+#     show first hangman with number of letters displayed
+# prompt user for a letter
+# if correct, give letter
+# if incorrect, say incorrect and push forward the hangman
 
 
 # create main function
