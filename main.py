@@ -41,7 +41,7 @@ HANGMAN_PICS = ['''
    / \  |
        ===''']
 
-def generateRandom():
+def generate_random():
     words = """ant baboon badger bat bear beaver camel cat clam cobra cougar
        coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk
        lion lizard llama mole monkey moose mouse mule newt otter owl panda
@@ -51,42 +51,75 @@ def generateRandom():
     random_word = random.choice(words)
     return random_word
 
-def displayHangman():
 
-    for pic in HANGMAN_PICS:
-        print(pic)
-
-def getSpaces(word):
+def get_spaces(word):
     spaces = ""
     for i in range(len(word)):
         spaces += "_"
     return spaces
 
 
+def fill_word(spaces, letter, word):
+    counter = 0
+    newWord = ""
+    additions = 0
+    for let in word:
+        if let == letter:
+            newWord += let
+            additions += 1
+        else:
+            newWord += spaces[counter]
+        counter += 1
+    return [newWord, additions]
+
+
+def check_letter(word, letter):
+    counter = 0
+    for let in word:
+        if let == letter:
+            return counter
+        counter += 1
+    return -1
+
+
 # main function
 def main():
-    random_word = generateRandom()
-    print("The length of your word is " + str(len(random_word)) + " letters. Good luck!")
-    word_space = getSpaces(random_word)
-    print(word_space)
-    displayHangman()
-#     show first hangman with number of letters displayed
-# prompt user for a letter
-# if correct, give letter
-# if incorrect, say incorrect and push forward the hangman
+    randomWord = generate_random()
+    word_length = len(randomWord)
+    print("The length of your word is " + str(word_length) + " letters. Good luck!")
+    wordSpace = get_spaces(randomWord)
+    counter = 0
+    guessed = []
+    guess = ""
+    while counter < 6 and word_length != 0:
+        print(HANGMAN_PICS[counter])
+        print(wordSpace)
+        guess = input("Please input a letter:\n")
+        while guess in guessed:
+            guess = input("Whoops. You've already input that letter. Please try again: \n")
+        guessed.append(guess)
+        check = check_letter(randomWord, guess)
+        if check == -1:
+            counter += 1
+            if counter == 6:
+                print(HANGMAN_PICS[6])
+                print("Sorry, you didn't get it this time.")
+            else:
+                print("Uh oh. Not correct.")
+        else:
+            info = fill_word(wordSpace, guess, randomWord)
+            wordSpace = info[0]
+            removed = info[1]
+            word_length -= removed
+            if word_length != 0:
+                print("You got one!")
+            else:
+                print("Congratulations, you solved it!\n")
+    print("The final word was " + randomWord + ".")
+
+
 
 
 # create main function
 if __name__ == '__main__':
     main()
-
-
-# TODO: display the length of the word to the user
-# TODO: correct_guesses is less than the length of the word
-# TODO: prompt the user to guess a letter
-# TODO: if the guess is correct increment correct_guesses by 1
-# TODO: if the guess is incorrect increment incorrect_guesses by 1
-# TODO: and draw the next part of the hangman
-# TODO: if the incorrect_guesses is greater than 8, tell the user
-# TODO: they lost and exit the program
-# TODO: if correct_guesses is equal to the length of the word, tell the user they won
